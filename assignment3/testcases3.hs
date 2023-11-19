@@ -1,4 +1,4 @@
-import Data.Array (listArray, array, (!))
+import Data.Array (listArray, (!))
 
 -- Problem 1
 hamming "" "" == Just 0
@@ -25,17 +25,16 @@ knightMove (5,2) 191 == [(0,0),(0,2),(0,4),(0,6),(1,1),(1,3),(1,5),(1,7),(2,0),(
 checkmss :: [Integer] -> Bool
 checkmss l_in = kadane l_in 0 0 == s_out && sum (map (^3) l_out) == s_out && segOf l_out l_in
   where
-    (s_out, l_out) = mss l_in
+    (s_out,l_out) = mss l_in
     kadane :: [Integer] -> Integer -> Integer -> Integer
     kadane [] _ maxSum = maxSum
-    kadane (x:xs) currentSum maxSum = kadane xs newSum newMax
-      where 
+    kadane (x:xs) currentSum maxSum = kadane xs newSum $ max maxSum newSum
+      where
         newSum = max 0 (currentSum + x^3)
-        newMax = max maxSum newSum
     segOf :: [Integer] -> [Integer] -> Bool
     segOf [] _ = True
-    segOf x [] = False
-    segOf (x:xs) (y:ys) = if x == y then segOf xs ys else segOf (x:xs) ys
+    segOf _ [] = False
+    segOf (x:xs) (y:ys) = segOf (if x == y then xs else x:xs) ys
 
 checkmss [4,1,-5,-5,-1,0,12]
 checkmss [-5,14,-3,11,1,19,0,14]
@@ -47,11 +46,11 @@ checkmss [22,0,-4,24,-5,14,22,11]
 checkED :: String -> String -> Bool
 checkED as bs = checkEdit d s (0,0)
   where
-    (d, s) = editDistance as bs
-    (la, lb) = (length as, length bs)
-    aArr = listArray (0, la) as
-    bArr = listArray (0, lb) bs
-    arr = listArray ((0,0), (la, lb)) [ed i j | i <- [0..la], j <- [0..lb]]
+    (d,s) = editDistance as bs
+    (la,lb) = (length as, length bs)
+    aArr = listArray (0,la) as
+    bArr = listArray (0,lb) bs
+    arr = listArray ((0,0), (la,lb)) [ed i j | i <- [0..la],j <- [0..lb]]
     ed :: Int -> Int -> Int
     ed i j
       | i == la = 2*(lb - j)
