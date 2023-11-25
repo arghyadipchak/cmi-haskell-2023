@@ -4,7 +4,6 @@ import Data.Ratio (denominator, numerator, (%))
 import Data.Word (Word8)
 
 -- Problem 1
--- Check if input list is an AP. Length <= 2 means it is a trivial AP.
 isAP :: [Integer] -> Bool
 isAP [] = True
 isAP [x] = True
@@ -18,7 +17,6 @@ isAP (x : y : xs) = isAP_ (y - x) (y : xs)
       | otherwise = False
 
 -- Problem 2
--- targetSum t l checks if two elements at distinct positions of l sum to t
 targetSum :: Integer -> [Integer] -> Bool
 targetSum _ [] = False
 targetSum _ [x] = False
@@ -28,7 +26,6 @@ targetSum t (x : xs) = targetSum_ xs || targetSum t xs
     targetSum_ (y : ys) = (x + y == t) || targetSum_ ys
 
 -- Problem 3
--- increment a list of Word8-s representing an integer
 incr :: [Word8] -> [Word8]
 incr [] = [1]
 incr l = map fromInteger (if t then 1 : l' else l')
@@ -44,7 +41,6 @@ incr l = map fromInteger (if t then 1 : l' else l')
         (y, z) = incr_ xs
 
 -- Problem 4
--- Find Int8 value represented by list of 8 bits (in twos complement form), and find twos complement representation (consisting of 8 bits) of an Int8.
 twosVal :: [Bool] -> Int8
 twosVal (x : xs) = if x then if v then -u else -z else z
   where
@@ -72,7 +68,6 @@ twosRep x = t : z
         f = e == 1
 
 -- Problem 5
--- Compute a finite continued fraction representing a rational, and the rational represented by a finite continued fraction.
 invert :: Rational -> Rational
 invert x = denominator x % numerator x
 
@@ -90,7 +85,6 @@ computeRat (x : xs) = (x * denominator y + numerator y) % denominator y
     y = invert $ computeRat xs
 
 -- Problem 6
--- Compute approximations of sqrt 15, based on infinite continued fraction.
 computeFrac :: Rational -> Double
 computeFrac x = fromIntegral (numerator x) / fromIntegral (denominator x)
 
