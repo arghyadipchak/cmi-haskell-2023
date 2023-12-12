@@ -1,6 +1,24 @@
+import Queue qualified as Q
+
 -- Problem 1
 vanadurga :: (Int, Int, Int) -> ([Int], [Int])
-vanadurga (m, r, n) = undefined
+vanadurga (m, r, n) = vanadurga_ 1 [] (Q.fromList [1 .. n])
+  where
+    mr = m * r
+    vanadurga_ :: Int -> [Int] -> Q.Queue Int -> ([Int], [Int])
+    vanadurga_ x l q
+      | x > mr || Q.isEmpty q = (reverse l, sorted [] q)
+      | mod x m == 0 = vanadurga_ (x + 1) (a : l) b
+      | otherwise = vanadurga_ (x + 1) l (Q.enqueue a b)
+      where
+        (a, b) = Q.dequeue q
+    sorted :: (Ord a) => [a] -> Q.Queue a -> [a]
+    sorted l q
+      | Q.isEmpty q = reverse l
+      | not (null l) && x < head l = x : Q.toList y ++ reverse l
+      | otherwise = sorted (x : l) y
+      where
+        (x, y) = Q.dequeue q
 
 -- Problem 2
 data Tree = E | NE T
